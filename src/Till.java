@@ -10,27 +10,36 @@ public class Till {
 
     public BigDecimal calculateTotalCost(List<Fruit> fruits) {
         BigDecimal totalCost = new BigDecimal("0");
-        BigDecimal discount = calculateDiscount(fruits);
 
         for(Fruit fruit : fruits){
             totalCost = totalCost.add(fruit.getPrice());
         }
 
-        return totalCost.add(discount.negate());
+        return totalCost.add(calculateDiscounts(fruits).negate());
     }
 
-    private BigDecimal calculateDiscount(List<Fruit> fruits) {
+    private BigDecimal calculateDiscounts(List<Fruit> fruits) {
+        return calculateAppleDiscount(fruits).add(calculateOrangeDiscount(fruits));
+    }
 
-        int applesQuantity = getAppleQuantity(fruits);
+    private BigDecimal calculateOrangeDiscount(List<Fruit> fruits) {
+        int orangesQuantity = getFruitQuantity(fruits, new Orange());
+        return new Orange().getPrice().multiply(new BigDecimal((orangesQuantity / 3)));
+    }
+
+
+    private BigDecimal calculateAppleDiscount(List<Fruit> fruits) {
+        int applesQuantity = getFruitQuantity(fruits, new Apple());
         return new Apple().getPrice().multiply(new BigDecimal((applesQuantity / 2)));
     }
 
-    public int getAppleQuantity(List<Fruit> fruits) {
+
+    public int getFruitQuantity(List<Fruit> fruits, Fruit fruitToFind) {
 
         int quantity = 0;
 
         for(Fruit fruit : fruits){
-            if(Apple.APPLE.equals(fruit.getName())){
+            if(fruitToFind.getName().equals(fruit.getName())){
                 quantity ++;
             }
         }

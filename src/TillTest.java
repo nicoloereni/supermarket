@@ -48,6 +48,23 @@ public class TillTest {
     }
 
     @Test
+    public void getThreeOrangePayOnlyTwo() throws Exception {
+
+        List<Fruit> fruits = new ArrayList();
+        fruits.add(new Orange());
+        fruits.add(new Orange());
+        fruits.add(new Orange());
+        fruits.add(new Apple());
+        fruits.add(new Apple());
+
+        BigDecimal totalCost = till.calculateTotalCost(fruits);
+
+        assertNotNull(totalCost);
+        assertEquals(new BigDecimal(7).doubleValue(), totalCost.doubleValue());
+
+    }
+
+    @Test
     public void getAppleQuantity() throws Exception {
 
         List<Fruit> fruits = new ArrayList();
@@ -55,7 +72,7 @@ public class TillTest {
         fruits.add(new Apple());
         fruits.add(new Apple());
 
-        assertEquals(2, till.getAppleQuantity(fruits));
+        assertEquals(2, till.getFruitQuantity(fruits, new Apple().getName()));
 
     }
 }
