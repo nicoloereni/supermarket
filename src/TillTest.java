@@ -10,22 +10,25 @@ import static junit.framework.TestCase.assertNotNull;
 
 public class TillTest {
 
-    private Till till;
+    private ArrayList<Fruit> baseFruit;
+    private List<Discount> discounts;
 
     @Before
     public void setUp() throws Exception {
-        till = new Till();
+        baseFruit = new ArrayList();
+        baseFruit.add(new Orange());
+        baseFruit.add(new Apple());
 
+        discounts = new ArrayList();
+        discounts.add(new AppleDiscount());
+        discounts.add(new OrangeDiscount());
     }
 
     @Test
-    public void getPriceOfAListOfOrangesAndApples(){
+    public void getPriceOfAListOfOrangesAndApples() {
 
-        List<Fruit> fruits = new ArrayList();
-        fruits.add(new Orange());
-        fruits.add(new Apple());
-
-        BigDecimal totalCost = till.calculateTotalCost(fruits);
+        Till till = new Till(baseFruit, discounts);
+        BigDecimal totalCost = till.calculateTotalCost();
 
         assertNotNull(totalCost);
         assertEquals(new BigDecimal(5).doubleValue(), totalCost.doubleValue());
@@ -33,14 +36,14 @@ public class TillTest {
     }
 
     @Test
-    public void getTwoApplesPayOnlyOne(){
+    public void getTwoApplesPayOnlyOne() {
 
         List<Fruit> fruits = new ArrayList();
-        fruits.add(new Orange());
-        fruits.add(new Apple());
+        fruits.addAll(baseFruit);
         fruits.add(new Apple());
 
-        BigDecimal totalCost = till.calculateTotalCost(fruits);
+        Till till = new Till(fruits, discounts);
+        BigDecimal totalCost = till.calculateTotalCost();
 
         assertNotNull(totalCost);
         assertEquals(new BigDecimal(5).doubleValue(), totalCost.doubleValue());
@@ -51,28 +54,17 @@ public class TillTest {
     public void getThreeOrangePayOnlyTwo() throws Exception {
 
         List<Fruit> fruits = new ArrayList();
+        fruits.addAll(fruits);
         fruits.add(new Orange());
         fruits.add(new Orange());
-        fruits.add(new Orange());
-        fruits.add(new Apple());
         fruits.add(new Apple());
 
-        BigDecimal totalCost = till.calculateTotalCost(fruits);
+        Till till = new Till(fruits, discounts);
+        BigDecimal totalCost = till.calculateTotalCost();
 
         assertNotNull(totalCost);
         assertEquals(new BigDecimal(7).doubleValue(), totalCost.doubleValue());
 
     }
 
-    @Test
-    public void getAppleQuantity() throws Exception {
-
-        List<Fruit> fruits = new ArrayList();
-        fruits.add(new Orange());
-        fruits.add(new Apple());
-        fruits.add(new Apple());
-
-        assertEquals(2, till.getFruitQuantity(fruits, new Apple().getName()));
-
-    }
 }
