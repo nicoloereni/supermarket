@@ -1,3 +1,4 @@
+import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -9,10 +10,16 @@ import static junit.framework.TestCase.assertNotNull;
 
 public class TillTest {
 
+    private Till till;
+
+    @Before
+    public void setUp() throws Exception {
+        till = new Till();
+
+    }
+
     @Test
     public void getPriceOfAListOfOrangesAndApples(){
-
-        Till till = new Till();
 
         List<Fruit> fruits = new ArrayList();
         fruits.add(new Orange());
@@ -25,4 +32,30 @@ public class TillTest {
 
     }
 
+    @Test
+    public void getTwoApplesPayOnlyOne(){
+
+        List<Fruit> fruits = new ArrayList();
+        fruits.add(new Orange());
+        fruits.add(new Apple());
+        fruits.add(new Apple());
+
+        BigDecimal totalCost = till.calculateTotalCost(fruits);
+
+        assertNotNull(totalCost);
+        assertEquals(new BigDecimal(5).doubleValue(), totalCost.doubleValue());
+
+    }
+
+    @Test
+    public void getAppleQuantity() throws Exception {
+
+        List<Fruit> fruits = new ArrayList();
+        fruits.add(new Orange());
+        fruits.add(new Apple());
+        fruits.add(new Apple());
+
+        assertEquals(2, till.getAppleQuantity(fruits));
+
+    }
 }
